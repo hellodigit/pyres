@@ -49,6 +49,15 @@ class Worker(object):
         else:
             raise Exception("Bad server argument")
 
+    def set_heartbeat(self):
+        """Sets the heartbeat of the worker."""
+	RESQUE_WORKER_HEARTBEAT_REGISTRY = "resque:workers:heartbeat"
+        self.resq.redis.hset(
+            RESQUE_WORKER_HEARTBEAT_REGISTRY,
+            "resque:worker:%s" % str(self),
+            now_iso()
+        )
+
     def validate_queues(self):
         """Checks if a worker is given at least one queue to work on."""
         if not self.queues:
@@ -56,6 +65,7 @@ class Worker(object):
 
     def register_worker(self):
         self.resq.redis.sadd('resque:workers', str(self))
+        self.set_heartbeat()
         self._set_started(now_iso())
         # self.started = datetime.datetime.now()
 
