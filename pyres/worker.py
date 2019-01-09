@@ -51,7 +51,7 @@ class Worker(object):
 
     def set_heartbeat(self):
         """Sets the heartbeat of the worker."""
-	RESQUE_WORKER_HEARTBEAT_REGISTRY = "resque:workers:heartbeat"
+        RESQUE_WORKER_HEARTBEAT_REGISTRY = "resque:workers:heartbeat"
         self.resq.redis.hset(
             RESQUE_WORKER_HEARTBEAT_REGISTRY,
             "resque:worker:%s" % str(self),
